@@ -1,7 +1,7 @@
 #### MAIN LIB ####
 
 # -=-=-=-=-=-=-
-VERSION = 'v1.0'
+VERSION = 'v1.1'
 
 from colorama import init, Fore, Back, Style
 import os
@@ -26,28 +26,46 @@ def exit():
 
 ''')
 	sys.exit()
-def intersection(message):
-	print('\n' + Style.BRIGHT + Fore.GREEN + '=' * 80 + Fore.YELLOW)
-	count = 80 - len(message)
-	count = count // 2
-	print(' ' * count + message)
-	print(Fore.GREEN + '=' * 80 + Style.RESET_ALL)
-def banner(message):
-	os.system('resize -s 40 80')
+
+def title(columns):
+	width = 63
+	if columns < 63:
+		os.system('resize -s 40 63')
+		offset = 0
+	else:
+		offset = columns - 63
+		offset = offset // 2
+	empty_offset = ' ' * offset
 	os.system('clear')
 	print(fr'''{Fore.GREEN}{Style.BRIGHT}
-        ▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
-        █{Fore.YELLOW}  ___       _______  ___      ___     ______    _____  ___   {Fore.GREEN}█
-        █{Fore.YELLOW} |"  |     /"     "||"  \    /"  |   /    " \  (\"   \|"  \  {Fore.GREEN}█
-        █{Fore.YELLOW} ||  |    (: ______) \   \  //   |  // ____  \ |.\\   \    | {Fore.GREEN}█
-        █{Fore.YELLOW} |:  |     \/    |   /\\  \/.    | /  /    ) :)|: \.   \\  | {Fore.GREEN}█
-        █{Fore.YELLOW}  \  |___  // ___)_ |: \.        |(: (____/ // |.  \    \. | {Fore.GREEN}█
-        █{Fore.YELLOW} ( \_|:  \(:      "||.  \    /:  | \        /  |    \    \ | {Fore.GREEN}█
-        █{Fore.YELLOW}  \_______)\_______)|___|\__/|___|  \"_____/    \___|\____\) {Fore.GREEN}█
-        █▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
-
-                         {Fore.RED}....{Fore.RESET} SpiceSouls {Fore.RED}---{Fore.RESET} v1.0.0 {Fore.RED}....
+{empty_offset}▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄
+{empty_offset}█{Fore.YELLOW}  ___       _______  ___      ___     ______    _____  ___   {Fore.GREEN}█
+{empty_offset}█{Fore.YELLOW} |"  |     /"     "||"  \    /"  |   /    " \  (\"   \|"  \  {Fore.GREEN}█
+{empty_offset}█{Fore.YELLOW} ||  |    (: ______) \   \  //   |  // ____  \ |.\\   \    | {Fore.GREEN}█
+{empty_offset}█{Fore.YELLOW} |:  |     \/    |   /\\  \/.    | /  /    ) :)|: \.   \\  | {Fore.GREEN}█
+{empty_offset}█{Fore.YELLOW}  \  |___  // ___)_ |: \.        |(: (____/ // |.  \    \. | {Fore.GREEN}█
+{empty_offset}█{Fore.YELLOW} ( \_|:  \(:      "||.  \    /:  | \        /  |    \    \ | {Fore.GREEN}█
+{empty_offset}█{Fore.YELLOW}  \_______)\_______)|___|\__/|___|  \"_____/    \___|\____\) {Fore.GREEN}█
+{empty_offset}█▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄▄█
 {Style.RESET_ALL}''')
+
+def intersection(message):
+	try:
+		columns, rows = os.get_terminal_size(0)
+	except OSError:
+		columns, rows = os.get_terminal_size(1)
+	print('\n' + Style.BRIGHT + Fore.GREEN + '=' * columns + Fore.YELLOW)
+	count = columns - len(message)
+	count = count // 2
+	print(' ' * count + message)
+	print(Fore.GREEN + '=' * columns + Style.RESET_ALL)
+def banner(message):
+	try:
+		columns, rows = os.get_terminal_size(0)
+	except OSError:
+		columns, rows = os.get_terminal_size(1)
+	title(columns)
+
 	intersection(message)
 	print(fr'''
 	      {Style.BRIGHT}{Fore.GREEN}[{Fore.YELLOW}01{Fore.GREEN}]{Style.RESET_ALL} Meterpreter Reverse TCP
@@ -60,8 +78,9 @@ def banner(message):
 	      {Style.BRIGHT}{Fore.GREEN}[{Fore.YELLOW}07{Fore.GREEN}]{Style.RESET_ALL} Powershell Stager Reverse TCP
               {Style.BRIGHT}{Fore.GREEN}[{Fore.YELLOW}08{Fore.GREEN}]{Style.RESET_ALL} Powershell Stager Bind TCP
 
-	      {Style.BRIGHT}{Fore.GREEN}[{Fore.YELLOW}99{Fore.GREEN}]{Style.RESET_ALL} Update
-              {Style.BRIGHT}{Fore.GREEN}[{Fore.YELLOW}00{Fore.GREEN}]{Style.RESET_ALL} Exit
+	      {Style.BRIGHT}{Fore.GREEN}[{Fore.YELLOW}update{Fore.GREEN}]{Style.RESET_ALL} Check for an Update
+	      {Style.BRIGHT}{Fore.GREEN}[{Fore.YELLOW}credits{Fore.GREEN}]{Style.RESET_ALL} Credits 2 The Dev
+              {Style.BRIGHT}{Fore.GREEN}[{Fore.YELLOW}exit{Fore.GREEN}]{Style.RESET_ALL} Exit the script
 ''')
 def update():
 	response = requests.get("https://api.github.com/repos/spicesouls/lemon/releases/latest")
@@ -85,53 +104,41 @@ def commandloop():
 			else:
 				break
 		try:
-			if int(selection1) == 0:
+			if selection1 == 'exit':
 				exit()
-			elif int(selection1) == 99:
+			elif selection1 == 'update':
 				update()
 				break
-			elif int(selection1) < 5:
-				os.system('resize -s 30 80')
+			elif selection1 == 'credits':
 				os.system('clear')
-				print(fr'''{Style.BRIGHT}{Fore.RED}
-       _____    ____________________{Fore.WHITE}____   ____{Fore.RED}
-      /     \  /   _____/\_   _____/{Fore.WHITE}\   \ /   /____   ____   ____   _____{Fore.RED}
-     /  \ /  \ \_____  \  |    __)  {Fore.WHITE} \   Y   // __ \ /    \ /  _ \ /     \{Fore.RED}
-    /    Y    \/        \ |     \   {Fore.WHITE}  \     /\  ___/|   |  (  <_> )  Y Y  \{Fore.RED}
-    \____|__  /_______  / \___  /   {Fore.WHITE}   \___/  \___  >___|  /\____/|__|_|  /{Fore.RED}
-            \/        \/      \/    {Fore.WHITE}              \/     \/             \/{Fore.RED}
+				print(fr'''
+    {Style.BRIGHT}{Fore.RED}DEV {Fore.RESET}---{Fore.YELLOW} SPICESOULS
+{Fore.BLUE}
+beyondrootsec.wordpress.com
+spicesouls.github.io
+{Fore.GREEN}
+SpiceSouls#2629
+@SpicySoulsV
 {Style.RESET_ALL}''')
-				intersection("PAYLOAD OPTIONS")
-				if selection1 == '1':
-					workingpayload = payloadoptions("windowsARCHmeterpreter_reverse_tcp")
-				elif selection1 == '2':
-					workingpayload = payloadoptions("windowsARCHmeterpreter_bind_tcp")
-				elif selection1 == '3':
-					workingpayload = payloadoptions("windowsARCHmeterpreter_reverse_http")
-				elif selection1 == '4':
-					workingpayload = payloadoptions("windowsARCHmeterpreter_reverse_https")
-
-			elif int(selection1) > 4 and int(selection1) < 9:
-                                os.system('resize -s 30 80')
-                                os.system('clear')
-                                print(fr'''{Style.BRIGHT}{Fore.CYAN}
-	                    _ {Fore.RESET}  __ _{Fore.CYAN}
-	  ___ _ __ ___   __| |{Fore.RESET} / _\ |_ __ _  __ _  ___ _ __ ___{Fore.CYAN}
-	 / __| '_ ` _ \ / _` |{Fore.RESET} \ \| __/ _` |/ _` |/ _ \ '__/ __|{Fore.CYAN}
-	| (__| | | | | | (_| |{Fore.RESET} _\ \ || (_| | (_| |  __/ |  \__ \{Fore.CYAN}
-	 \___|_| |_| |_|\__,_|{Fore.RESET} \__/\__\__,_|\__, |\___|_|  |___/{Fore.CYAN}
-	                      {Fore.RESET}              |___/{Fore.CYAN}
-{Style.RESET_ALL}''')
-                                intersection("PAYLOAD OPTIONS")
-                                if selection1 == '5':
-                                        workingpayload = payloadoptions("cmd/unix/reverse_bash")
-                                elif selection1 == '6':
-                                        workingpayload = payloadoptions("cmd/unix/reverse_bash_udp")
-                                elif selection1 == '7':
-                                        workingpayload = payloadoptions("cmd/windows/powershell_reverse_tcp")
-                                elif selection1 == '8':
-                                        workingpayload = payloadoptions("cmd/windows/powershell_bind_tcp")
-			intersection("PAYLOAD GENERATION")
+				input('Press ENTER To Continue...')
+				break
+			poptions = {
+	"1":"windowsARCHmeterpreter_reverse_tcp",
+	"2":"windowsARCHmeterpreter_bind_tcp",
+	"3":"windowsARCHmeterpreter_reverse_http",
+	"4":"windowsARCHmeterpreter_reverse_https",
+	"5":"cmd/unix/reverse_bash",
+	"6":"cmd/unix/reverse_bash_udp",
+	"7":"cmd/windows/powershell_reverse_tcp",
+	"8":"cmd/windows/powershell_bind_tcp"
+}
+			try:
+				msf_payload = poptions[str(selection1)]
+			except KeyError:
+				break
+			intersection(f"PAYLOAD OPTIONS - {msf_payload.replace('ARCH', '/')}")
+			workingpayload = payloadoptions(msf_payload)
+			intersection(f"PAYLOAD GENERATION - {msf_payload.replace('ARCH', '/')}")
 			workingpayload.generate()
 			msfchoice = input(f'\nWould you like to get the MSF Console ready to handle connections? {Style.BRIGHT}[{Fore.GREEN}Y{Fore.RESET}]/[{Fore.RED}N{Fore.RESET}]{Style.RESET_ALL}\n>> ').upper()
 			if msfchoice == 'Y':
